@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Current Time</title>
+    <script>
+        async function fetchTime() {
+            try {
+                const response = await fetch('http://127.0.0.1:5000/time');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+                console.log('Fetched times:', data);
+                displayTimes(data);
+            } catch (error) {
+                console.error('Fetch error:', error);
+            }
+        }
+
+        function displayTimes(times) {
+            const timeList = document.getElementById('time-list');
+            timeList.innerHTML = '';
+            for (const [city, time] of Object.entries(times)) {
+                const listItem = document.createElement('li');
+                listItem.textContent = `${city}: ${time}`;
+                timeList.appendChild(listItem);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchTime();
+        });
+    </script>
+</head>
+<body>
+    <h1>Current Time for Various Cities</h1>
+    <ul id="time-list">
+        <!-- Time entries will be added here -->
+    </ul>
+</body>
+</html>
